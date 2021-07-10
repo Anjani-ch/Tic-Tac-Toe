@@ -8,7 +8,7 @@
   },
   "author": "Anjani Pranav Reddy Chapparapu",
   "license": "ISC",
-  "homepage": "https://Anjani-ch.github.io/Tic_Tac_Toe",
+  "homepage": "https://anjani-ch.github.io/Tic_Tac_Toe",
   "dependencies": {
     "gh-pages": "^3.2.3"
   }
