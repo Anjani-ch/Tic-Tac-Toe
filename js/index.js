@@ -1,59 +1,155 @@
-const BOARD = document.querySelector('#board')
-const SPOTS = document.querySelectorAll('.spot')
-const MESSAGE = document.querySelector('#message')
-const BUTTON = document.querySelector('button')
+const boardElement = document.querySelector('#board');
+const outputElement = document.querySelector('#output');
+const restartBtn = document.querySelector('#restart-btn');
 
-const PLAYER = 'X'
-const COMPUTER = 'O'
+const PLAYER_1 = 'x';
+const PLAYER_2 = 'o';
 
-let isPlaying = true
+let currentPlayer;
+let isPlaying;
+let board;
 
-const checkResult = () => {
-    if (SPOTS[0].textContent === PLAYER && SPOTS[1].textContent === PLAYER && SPOTS[2].textContent === PLAYER || SPOTS[3].textContent === PLAYER && SPOTS[4].textContent === PLAYER && SPOTS[5].textContent === PLAYER || SPOTS[6].textContent === PLAYER && SPOTS[7].textContent === PLAYER && SPOTS[8].textContent === PLAYER || SPOTS[0].textContent === PLAYER && SPOTS[3].textContent === PLAYER && SPOTS[6].textContent === PLAYER || SPOTS[1].textContent === PLAYER && SPOTS[4].textContent === PLAYER && SPOTS[7].textContent === PLAYER || SPOTS[2].textContent === PLAYER && SPOTS[5].textContent === PLAYER && SPOTS[8].textContent === PLAYER || SPOTS[0].textContent === PLAYER && SPOTS[4].textContent === PLAYER && SPOTS[8].textContent === PLAYER || SPOTS[2].textContent === PLAYER && SPOTS[4].textContent === PLAYER && SPOTS[6].textContent === PLAYER) {
-        MESSAGE.textContent = 'You Won!'
-        BUTTON.style.display = 'block'
-        isPlaying = false
-    } else if (SPOTS[0].textContent === COMPUTER && SPOTS[1].textContent === COMPUTER && SPOTS[2].textContent === COMPUTER || SPOTS[3].textContent === COMPUTER && SPOTS[4].textContent === COMPUTER && SPOTS[5].textContent === COMPUTER || SPOTS[6].textContent === COMPUTER && SPOTS[7].textContent === COMPUTER && SPOTS[8].textContent === COMPUTER || SPOTS[0].textContent === COMPUTER && SPOTS[3].textContent === COMPUTER && SPOTS[6].textContent === COMPUTER || SPOTS[1].textContent === COMPUTER && SPOTS[4].textContent === COMPUTER && SPOTS[7].textContent === COMPUTER || SPOTS[2].textContent === COMPUTER && SPOTS[5].textContent === COMPUTER && SPOTS[8].textContent === COMPUTER || SPOTS[0].textContent === COMPUTER && SPOTS[4].textContent === COMPUTER && SPOTS[8].textContent === COMPUTER || SPOTS[2].textContent === COMPUTER && SPOTS[4].textContent === COMPUTER && SPOTS[6].textContent === COMPUTER) {
-        MESSAGE.textContent = 'Computer Won!'
-        BUTTON.style.display = 'block'
-        isPlaying = false
-    } else if (SPOTS[0].textContent !== '' && SPOTS[1].textContent !== '' && SPOTS[2].textContent !== '' && SPOTS[3].textContent !== '' && SPOTS[4].textContent !== '' && SPOTS[5].textContent !== '' && SPOTS[6].textContent !== '' && SPOTS[7].textContent !== '' && SPOTS[8].textContent !== '' && SPOTS[0].textContent !== '' && SPOTS[3].textContent !== '' && SPOTS[6].textContent !== '' && SPOTS[1].textContent !== '' && SPOTS[4].textContent !== '' && SPOTS[7].textContent !== '' && SPOTS[2].textContent !== '' && SPOTS[5].textContent !== '' && SPOTS[8].textContent !== '' && SPOTS[0].textContent !== '' && SPOTS[4].textContent !== '' && SPOTS[8].textContent !== '' && SPOTS[2].textContent !== '' && SPOTS[4].textContent !== '' && SPOTS[6].textContent !== '') {
-        MESSAGE.textContent = 'Its A Draw!'
-        BUTTON.style.display = 'block'
-        isPlaying = false
+window.addEventListener('DOMContentLoaded', initNewGame);
+boardElement.addEventListener('click', handleBoardClick);
+restartBtn.addEventListener('click', initNewGame);
+
+function changeOutput(text) {
+    outputElement.innerText = text;
+}
+
+function initNewGame() {
+    const spots = Array.from(document.querySelectorAll('.spot'));
+
+    currentPlayer = PLAYER_1;
+    isPlaying = true;
+
+    board = [
+        ['', '', ''],
+        ['', '', ''],
+        ['', '', '']
+    ];
+
+    // Reset spots
+    spots.forEach(spot => {
+        spot.classList.add('empty');
+        spot.classList.remove(PLAYER_1);
+        spot.classList.remove(PLAYER_2);
+    });
+
+    outputElement.classList.add('hidden');
+    restartBtn.classList.add('hidden');
+}
+
+function handleBoardClick(e) {
+    const spot = e.target;
+    const isSpot = spot.classList.contains('spot');
+
+    if(isSpot) {
+        const isEmpty = spot.classList.contains('empty');
+
+        if(isEmpty) {
+            if(isPlaying) {
+                makePlayerMove(spot);
+                mapBoard();
+                checkWin();
+                swapTurns();
+            }
+
+            if(isPlaying) {
+                makeAiMove();
+                mapBoard();
+                checkWin();
+                swapTurns();
+            }
+        }
+    }
+}
+function makePlayerMove(spot) {
+    spot.classList.remove('empty');
+    spot.classList.add(currentPlayer);
+}
+
+function makeAiMove() {
+    const spots = Array.from(document.querySelectorAll('.spot'));
+
+    for(let i = 0; i < 100; i++) {
+        const randomIndex = Math.round(Math.random() * (spots.length - 1));
+
+        const spot = spots[randomIndex];
+        const isEmpty = spot.classList.contains('empty');
+
+        if(isEmpty) {
+            spot.classList.remove('empty');
+            spot.classList.add(currentPlayer);
+            break;
+        }
     }
 }
 
-BOARD.addEventListener('click', e => {
-    if (e.target.classList.contains('spot') && e.target.textContent === '' && isPlaying) {
-        e.target.textContent = PLAYER
+function swapTurns() {
+    const isPlayer1 = currentPlayer === PLAYER_1;
+    const isPlayer2 = currentPlayer === PLAYER_2;
 
-        checkResult()
+    if(isPlayer1) currentPlayer = PLAYER_2;
+    if(isPlayer2) currentPlayer = PLAYER_1;
+}
 
-        if (MESSAGE.textContent === '') {
-            let randomIndex = Math.round(Math.random() * (SPOTS.length - 1))
 
-            if (SPOTS[randomIndex].textContent === '') {
-                SPOTS[randomIndex].textContent = COMPUTER
-            } else {
-                for (let i = 0; i < 1000; i++) {
-                    randomIndex = Math.round(Math.random() * (SPOTS.length - 1))
+function mapBoard() {
+    const spots = Array.from(document.querySelectorAll('.spot'));
 
-                    if (SPOTS[randomIndex].textContent === '') {
-                        SPOTS[randomIndex].textContent = COMPUTER
-                        break
-                    }
-                }
-            }
-        }
+    spots.forEach(spot => {
+        const rowIndex = parseInt(spot.getAttribute('data-row'), 10);
+        const colIndex = parseInt(spot.getAttribute('data-col'), 10);
 
-        checkResult()
+        const isPlayer1Value = spot.classList.contains(PLAYER_1);
+        const isPlayer2Value = spot.classList.contains(PLAYER_2);
+
+        if(isPlayer1Value) board[rowIndex][colIndex] = PLAYER_1;
+        if(isPlayer2Value) board[rowIndex][colIndex] = PLAYER_2;
+    });
+}
+
+function isWinConditionMet(spot1, spot2, spot3) {
+    return spot1 == spot2 && spot2 == spot3 && spot1 !== '';
+}
+
+function isHorizontalWin() {
+    for (let i = 0; i < 3; i++) {
+        if (isWinConditionMet(board[i][0], board[i][1], board[i][2])) return true;
     }
-})
+}
 
-BUTTON.addEventListener('click', () => {
-    SPOTS.forEach(spot => spot.textContent = '')
-    MESSAGE.textContent = ''
-    BUTTON.style.display = 'none'
-    isPlaying = true
-})
+function isVerticalWin() {
+    for (let i = 0; i < 3; i++) {
+        if (isWinConditionMet(board[0][i], board[1][i], board[2][i])) return true;
+    }
+}
+
+function isDiagonalWin() {
+    let result = false;
+    if (isWinConditionMet(board[0][0], board[1][1], board[2][2])) result = true;
+    if (isWinConditionMet(board[2][0], board[1][1], board[0][2])) result = true;
+
+    return result;
+}
+
+function checkWin() {
+    const spots = Array.from(document.querySelectorAll('.spot'));
+
+    const isDraw = spots.every(spot => !spot.classList.contains('empty')); // Check if no spots are empty
+
+    let isWin = false;
+
+    isWin = isHorizontalWin() || isVerticalWin() || isDiagonalWin();
+
+    if(isWin || isDraw) {
+        isPlaying = false;
+
+        if(isWin) changeOutput(`${currentPlayer.toUpperCase()}' Wins`);
+        if(isDraw) changeOutput("It's A Draw");
+
+        outputElement.classList.remove('hidden');
+        restartBtn.classList.remove('hidden');
+    }
+}
