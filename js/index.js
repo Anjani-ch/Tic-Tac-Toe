@@ -69,6 +69,18 @@ const initNewGame = _ => {
     restartBtn.classList.add('hidden');
 }
 
+const terminateGame = msg => {
+    // Show DOM feedback elements
+    outputElement.classList.remove('hidden');
+    restartBtn.classList.remove('hidden');
+
+    // Announce winner
+    outputElement.innerText = msg;
+
+    // Stop Game
+    isPlaying = false;
+}
+
 const swapCurrentPlayer = _ => {
     if(currentPlayer === PLAYER_1) currentPlayer = PLAYER_2;
     else if(currentPlayer === PLAYER_2) currentPlayer = PLAYER_1;
@@ -169,27 +181,8 @@ const checkResult = (board, player) => {
 
     isDraw = tempBoard.every(cell => cell); // Return if all cells are filles
 
-    if(isWin) {    
-        // Show DOM feedback elements
-        outputElement.classList.remove('hidden');
-        restartBtn.classList.remove('hidden');
-
-        // Announce winner
-        outputElement.innerText = `${player}' Wins`;
-
-        // Stop Game
-        isPlaying = false;
-    } else if(isDraw) {
-        // Show DOM feedback elements
-        outputElement.classList.remove('hidden');
-        restartBtn.classList.remove('hidden');
-
-        // Announce winner
-        outputElement.innerText = `It's A Draw`;
-
-        // Stop Game
-        isPlaying = false;
-    }
+    if(isWin) terminateGame(`${player}' Wins`);
+    else if(isDraw) terminateGame(`It's A Draw`);
 }
 
 const drawBoard = (board, ctx) => {
