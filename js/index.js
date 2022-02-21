@@ -69,6 +69,18 @@ const initNewGame = _ => {
     restartBtn.classList.add('hidden');
 }
 
+const terminateGame = msg => {
+    // Show DOM feedback elements
+    outputElement.classList.remove('hidden');
+    restartBtn.classList.remove('hidden');
+
+    // Announce winner
+    outputElement.innerText = msg;
+
+    // Stop Game
+    isPlaying = false;
+}
+
 const drawBoard = (board, ctx) => {
     // Horizontal lines
     for(let i = 1; i < board.length; i++) {
@@ -182,27 +194,8 @@ const checkResult = (board, player) => {
 
     isDraw = tempBoard.every(cell => cell); // Return if all cells are filles
 
-    if(isWin) {    
-        // Show DOM feedback elements
-        outputElement.classList.remove('hidden');
-        restartBtn.classList.remove('hidden');
-
-        // Announce winner
-        outputElement.innerText = `${player}' Wins`;
-
-        // Stop Game
-        isPlaying = false;
-    } else if(isDraw) {
-        // Show DOM feedback elements
-        outputElement.classList.remove('hidden');
-        restartBtn.classList.remove('hidden');
-
-        // Announce winner
-        outputElement.innerText = `It's A Draw`;
-
-        // Stop Game
-        isPlaying = false;
-    }
+    if(isWin) terminateGame(`${player}' Wins`);
+    else if(isDraw) terminateGame(`It's A Draw`);
 }
 
 const update = (board, ctx) => {
