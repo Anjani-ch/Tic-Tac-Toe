@@ -59,8 +59,8 @@ const initNewGame = _ => {
     
     // Reset board
     for(let rowIndex = 0; rowIndex < 3; rowIndex++) {
-        for(let colIndex = 0; colIndex < 3; colIndex++) {
-            board[rowIndex][colIndex] = '';
+        for(let cellIndex = 0; cellIndex < 3; cellIndex++) {
+            board[rowIndex][cellIndex] = '';
         }
     }
 
@@ -210,13 +210,13 @@ const update = (board, ctx) => {
 
 const handleBoardClick = (e, board) => {
     const rowIndex = Math.floor(e.offsetY / boardHeightSpaced);
-    const colIndex = Math.floor(e.offsetX / boardWidthSpaced);
+    const cellIndex = Math.floor(e.offsetX / boardWidthSpaced);
 
-    const isSpotEmpty = !board[rowIndex][colIndex];
+    const isSpotEmpty = !board[rowIndex][cellIndex];
 
     if(isSpotEmpty && isPlaying) {
         // Update spot to be current player
-        board[rowIndex][colIndex] = currentPlayer;
+        board[rowIndex][cellIndex] = currentPlayer;
         checkResult(board, currentPlayer);
         swapCurrentPlayer();
     }
