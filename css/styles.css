@@ -4,13 +4,13 @@
   --primary: white;
   --secondary: black;
   --border-size: 3px;
-  --board-size: 500px;
+  --board-size: 450px;
   --player-size: 5px;
 }
 
 body {
+  margin: 0;
   font-family: 'Roboto', sans-serif;
-  height: 80vh;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -31,7 +31,7 @@ h1 {
   height: var(--board-size);
   width: var(--board-size);
   display: grid;
-  grid-template-columns: repeat(3, calc(100% / 3));
+  grid-template-columns: repeat(3, 1fr);
 }
 
 .spot {
