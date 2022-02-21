@@ -39,23 +39,6 @@ const makePlayerMove = spot=> {
     spot.classList.add(currentPlayer);
 }
 
-const makeAiMove = _ => {
-    const spots = Array.from(document.querySelectorAll('.spot'));
-
-    for(let i = 0; i < 100; i++) {
-        const randomIndex = Math.round(Math.random() * (spots.length - 1));
-
-        const spot = spots[randomIndex];
-        const isEmpty = spot.classList.contains('empty');
-
-        if(isEmpty) {
-            spot.classList.remove('empty');
-            spot.classList.add(currentPlayer);
-            break;
-        }
-    }
-}
-
 const swapTurns = _ => {
     const isPlayer1 = currentPlayer === PLAYER_1;
     const isPlayer2 = currentPlayer === PLAYER_2;
@@ -63,7 +46,6 @@ const swapTurns = _ => {
     if(isPlayer1) currentPlayer = PLAYER_2;
     if(isPlayer2) currentPlayer = PLAYER_1;
 }
-
 
 const mapBoard = _ => {
     const spots = Array.from(document.querySelectorAll('.spot'));
@@ -90,13 +72,6 @@ const handleBoardClick = e => {
         if(isEmpty) {
             if(isPlaying) {
                 makePlayerMove(spot);
-                mapBoard();
-                checkWin();
-                swapTurns();
-            }
-
-            if(isPlaying) {
-                makeAiMove();
                 mapBoard();
                 checkWin();
                 swapTurns();
@@ -137,7 +112,7 @@ const checkWin = _ => {
         isPlaying = false;
 
         if(isWin) changeOutput(`${currentPlayer.toUpperCase()}' Wins`);
-        if(isDraw) changeOutput("It's A Draw");
+        else if(isDraw) changeOutput("It's A Draw");
 
         outputElement.classList.remove('hidden');
         restartBtn.classList.remove('hidden');
