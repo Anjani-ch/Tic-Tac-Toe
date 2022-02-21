@@ -137,7 +137,7 @@ const checkWin = _ => {
         isPlaying = false;
 
         if(isWin) changeOutput(`${currentPlayer.toUpperCase()}' Wins`);
-        if(isDraw) changeOutput("It's A Draw");
+        else if(isDraw) changeOutput("It's A Draw");
 
         outputElement.classList.remove('hidden');
         restartBtn.classList.remove('hidden');
