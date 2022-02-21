@@ -34,7 +34,7 @@ const initNewGame = _ => {
     restartBtn.classList.add('hidden');
 }
 
-const makePlayerMove = spot=> {
+const makePlayerMove = spot => {
     spot.classList.remove('empty');
     spot.classList.add(currentPlayer);
 }
