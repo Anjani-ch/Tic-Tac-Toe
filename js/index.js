@@ -59,8 +59,8 @@ const initNewGame = _ => {
     
     // Reset board
     for(let rowIndex = 0; rowIndex < 3; rowIndex++) {
-        for(let colIndex = 0; colIndex < 3; colIndex++) {
-            board[rowIndex][colIndex] = '';
+        for(let cellIndex = 0; cellIndex < 3; cellIndex++) {
+            board[rowIndex][cellIndex] = '';
         }
     }
 
@@ -86,12 +86,12 @@ const swapCurrentPlayer = _ => {
     else if(currentPlayer === PLAYER_2) currentPlayer = PLAYER_1;
 }
 
-const makePlayerMove = (board, { rowIndex, colIndex }) => {
+const makePlayerMove = (board, { rowIndex, cellIndex }) => {
     if(isPlaying) {
-        const isCellEmpty = !board[rowIndex][colIndex];
+        const isCellEmpty = !board[rowIndex][cellIndex];
 
         if(isCellEmpty) {
-            board[rowIndex][colIndex] = currentPlayer;
+            board[rowIndex][cellIndex] = currentPlayer;
 
             checkResult(board, currentPlayer);
             swapCurrentPlayer();
@@ -110,10 +110,10 @@ const makeAiMove = board => {
 
             const isCellEmpty = !board[randomRowIndex][randomColIndex];
 
-            if(isCellEmpty) randomIndexes = { rowIndex: randomRowIndex, colIndex: randomColIndex };
+            if(isCellEmpty) randomIndexes = { rowIndex: randomRowIndex, cellIndex: randomColIndex };
         }
 
-        board[randomIndexes.rowIndex][randomIndexes.colIndex] = currentPlayer;
+        board[randomIndexes.rowIndex][randomIndexes.cellIndex] = currentPlayer;
 
         checkResult(board, currentPlayer);
         swapCurrentPlayer();
@@ -244,9 +244,9 @@ const update = (board, ctx) => {
 
 const handleBoardClick = (e, board) => {
     const rowIndex = Math.floor(e.offsetY / boardHeightSpaced);
-    const colIndex = Math.floor(e.offsetX / boardWidthSpaced);
+    const cellIndex = Math.floor(e.offsetX / boardWidthSpaced);
 
-    makePlayerMove(board, { rowIndex,colIndex });
+    makePlayerMove(board, { rowIndex,cellIndex });
 }
 
 window.addEventListener('DOMContentLoaded', e => {
